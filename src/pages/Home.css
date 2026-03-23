@@ -1,0 +1,521 @@
+.home-container {
+  padding: 60px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+}
+
+.home-card {
+  width: 100%;
+  max-width: 1100px;
+  margin-top: -40px;
+  padding: 60px;
+  border-radius: 24px;
+  background: var(--card-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--card-border);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
+  color: var(--text-main);
+}
+
+.home-top {
+  display: flex;
+  gap: 60px;
+  flex-wrap: wrap;
+}
+
+.home-left {
+  flex: 2;
+  min-width: 300px;
+  padding-right: 40px;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.home-right {
+  flex: 1;
+  min-width: 250px;
+}
+
+.home-title {
+  font-size: 34px;
+  margin-bottom: 20px;
+}
+
+.home-description p {
+  margin-bottom: 18px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.warning-text {
+  font-weight: 600;
+  color: #f87171;
+}
+
+.home-section h2,
+.home-contact h2,
+.products-title {
+  font-size: 20px;
+  margin-bottom: 15px;
+  color: #818cf8;
+}
+
+.home-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.home-section li {
+  margin-bottom: 10px;
+  color: var(--text-soft);
+}
+
+.home-contact {
+  padding: 25px;
+  border-radius: 16px;
+  background: var(--contact-bg);
+  border: 1px solid var(--card-border);
+}
+
+.contact-info {
+  margin-top: 15px;
+  line-height: 1.8;
+}
+
+.hm-banner {
+  position: relative;
+  width: 100%;
+  max-width: 1100px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.hm-banner-track {
+  position: relative;
+  width: 100%;
+  height: 440px;
+}
+
+.hm-banner-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  border-radius: 16px;
+  display: block;
+}
+
+.hm-banner-img.active {
+  opacity: 1;
+}
+
+.hm-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.4);
+  border: none;
+  color: #fff;
+  font-size: 28px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+  line-height: 1;
+}
+
+.hm-arrow:hover {
+  background: rgba(0, 0, 0, 0.65);
+}
+
+.hm-arrow-left {
+  left: 12px;
+}
+
+.hm-arrow-right {
+  right: 12px;
+}
+
+.hm-dots {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+
+.hm-dot {
+  width: 24px;
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.hm-dot.active {
+  background: #fff;
+}
+
+.hm-section-title {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  max-width: 1100px;
+  margin: 48px auto 24px;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+.hm-section-title h4 {
+  white-space: nowrap;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--color-text-primary);
+}
+
+.hm-line {
+  flex: 1;
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  margin: 0;
+}
+
+.hm-platforms {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto 48px;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+.hm-platform-card {
+  position: relative;
+  border-radius: 50%;
+  overflow: hidden;
+  aspect-ratio: 1;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.hm-platform-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.hm-platform-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hm-platform-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s;
+  border-radius: 50%;
+}
+
+.hm-platform-card:hover .hm-platform-overlay {
+  opacity: 1;
+}
+
+.hm-platform-overlay span {
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  padding: 0 6px;
+}
+
+.hm-devices {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto 32px;
+  padding: 0 16px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.hm-devices h3 {
+  font-size: 32px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  color: var(--color-text-primary);
+}
+
+.hm-devices-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  flex-wrap: wrap;
+}
+
+.hm-device {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 0 32px;
+}
+
+.hm-device-icon {
+  width: 52px;
+  height: 52px;
+  color: var(--color-text-secondary);
+  stroke: currentColor;
+}
+
+.hm-device p {
+  font-size: 18px;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.hm-divider {
+  width: 1px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.hm-contact-section {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto 48px;
+  padding: 0 16px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.hm-contact-section h3 {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin-bottom: 24px;
+  color: var(--color-text-primary);
+}
+
+.hm-contact-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.hm-contact-card {
+  background: var(--color-background-secondary);
+  border: 1px solid var(--color-border-tertiary);
+  border-radius: 16px;
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.hm-contact-icon {
+  font-size: 36px;
+  color: #6366f1;
+}
+
+.hm-contact-card h4 {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--color-text-primary);
+}
+
+.hm-contact-card p {
+  font-size: 18px;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.hm-contact-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  margin-top: 4px;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.hm-contact-btn:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+.hm-btn-support {
+  background: #25d366;
+  color: #fff;
+}
+
+.hm-btn-sales {
+  background: #128c7e;
+  color: #fff;
+}
+
+.hm-badge {
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  padding: 1px 8px;
+  font-size: 11px;
+}
+
+@media (max-width: 1024px) {
+  .home-container {
+    padding: 40px 24px;
+  }
+
+  .home-card {
+    padding: 40px 32px;
+  }
+
+  .hm-platforms {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .home-container {
+    padding: 24px 16px;
+    gap: 24px;
+  }
+
+  .home-card {
+    padding: 24px 20px;
+    margin-top: 0;
+    border-radius: 16px;
+  }
+
+  .home-top {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .home-left {
+    padding-right: 0;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 24px;
+    min-width: unset;
+  }
+
+  .home-right {
+    min-width: unset;
+  }
+
+  .home-title {
+    font-size: 24px;
+  }
+
+  .hm-banner-track {
+    height: 200px;
+  }
+
+  .hm-platforms {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .hm-devices h3 {
+    font-size: 22px;
+  }
+
+  .hm-device p {
+    font-size: 14px;
+  }
+
+  .hm-device-icon {
+    width: 38px;
+    height: 38px;
+  }
+
+  .hm-device {
+    padding: 0 16px;
+  }
+
+  .hm-contact-row {
+    grid-template-columns: 1fr;
+  }
+
+  .hm-contact-card h4 {
+    font-size: 18px;
+  }
+
+  .hm-contact-card p {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-container {
+    padding: 16px 12px;
+    gap: 20px;
+  }
+
+  .home-card {
+    padding: 20px 16px;
+  }
+
+  .home-title {
+    font-size: 20px;
+  }
+
+  .hm-banner-track {
+    height: 160px;
+  }
+
+  .hm-platforms {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .hm-devices-row {
+    gap: 0;
+  }
+
+  .hm-device {
+    padding: 0 10px;
+  }
+
+  .hm-divider {
+    height: 36px;
+  }
+
+  .hm-section-title h4 {
+    font-size: 13px;
+  }
+
+  .hm-contact-icon {
+    font-size: 28px;
+  }
+}

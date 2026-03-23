@@ -1,0 +1,164 @@
+* {
+  transition: background 0.3s ease, color 0.3s ease, border 0.3s ease;
+}
+
+:root {
+  --bg-main: linear-gradient(to right, #0f172a, #1e293b);
+  --bg-navbar: #0b1220;
+  --bg-sidebar: #111827;
+  --bg-card: #1f2937;
+  --text-primary: white;
+  --text-secondary: #9ca3af;
+}
+
+[data-theme="light"] {
+  --bg-main: linear-gradient(to right, #f8fafc, #e2e8f0);
+  --bg-navbar: #ffffff;
+  --bg-sidebar: #f1f5f9;
+  --bg-card: #ffffff;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+}
+
+:root {
+  --input-bg: rgba(15, 23, 42, 0.8);
+  --input-border: rgba(255, 255, 255, 0.08);
+  --card-bg-dark: rgba(15, 23, 42, 0.8);
+  --card-bg-light: #ffffff;
+  --text-main: white;
+  --text-soft: #94a3b8;
+  --empty-text: #64748b;
+  --border-color: #ddd;
+}
+
+[data-theme="light"] {
+  --input-bg: #ffffff;
+  --input-border: rgba(0, 0, 0, 0.1);
+  --card-bg-dark: #ffffff;
+  --text-main: #0f172a;
+  --text-soft: #475569;
+  --empty-text: #64748b;
+  --border-color: rgba(0, 0, 0, 0.1);
+}
+
+:root {
+  --card-glass: rgba(255,255,255,0.05);
+  --divider-line: rgba(255,255,255,0.08);
+  --chip-bg: rgba(108,99,255,0.25);
+  --chip-hover: rgba(108,99,255,0.45);
+  --chip-active: #6c63ff;
+  --input-bg: rgba(15, 23, 42, 0.8);
+  --input-border: rgba(255,255,255,0.08);
+  --text-soft: rgba(255,255,255,0.6);
+}
+
+[data-theme="light"] {
+  --card-glass: rgba(255,255,255,0.85);
+  --divider-line: rgba(0,0,0,0.12);
+  --chip-bg: rgba(108,99,255,0.15);
+  --chip-hover: rgba(108,99,255,0.30);
+  --chip-active: #6c63ff;
+  --input-bg: #ffffff;
+  --input-border: rgba(0,0,0,0.15);
+  --text-soft: rgba(0,0,0,0.6);
+}
+
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:root {
+  --profile-card-bg: #1c1f3a;
+  --profile-value-bg: #2a2d4a;
+  --profile-text: white;
+  --profile-label: rgba(255,255,255,0.8);
+  --profile-input-bg: #2a2d4a;
+  --profile-spinner-bg: #2a2d4a;
+}
+
+[data-theme="light"] {
+  --profile-card-bg: #ffffff;
+  --profile-value-bg: #f1f5f9;
+  --profile-text: #0f172a;
+  --profile-label: rgba(0,0,0,0.7);
+  --profile-input-bg: #f1f5f9;
+  --profile-spinner-bg: #e2e8f0;
+}
+
+:root {
+  --users-card-bg: rgba(255,255,255,0.05);
+  --users-divider: rgba(255,255,255,0.08);
+  --users-input-bg: rgba(15,23,42,0.8);
+  --users-input-border: rgba(255,255,255,0.08);
+  --users-chip-bg: rgba(108,99,255,0.15);
+  --users-chip-border: rgba(108,99,255,0.25);
+}
+
+[data-theme="light"] {
+  --users-card-bg: rgba(255,255,255,0.85);
+  --users-divider: rgba(0,0,0,0.12);
+  --users-input-bg: #ffffff;
+  --users-input-border: rgba(0,0,0,0.15);
+  --users-chip-bg: rgba(108,99,255,0.12);
+  --users-chip-border: rgba(108,99,255,0.35);
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+
+a:hover {
+  color: #535bf2;
+}
+
+body {
+  margin: 0;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 10px 14px;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}

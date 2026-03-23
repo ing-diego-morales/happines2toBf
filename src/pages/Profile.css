@@ -1,0 +1,212 @@
+.profile-container {
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.profile-card {
+  width: 100%;
+  max-width: 900px;
+  background: var(--profile-card-bg);
+  color: var(--profile-text);
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+.profile-card h2 {
+  margin-bottom: 30px;
+  font-size: 26px;
+}
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.profile-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-field label {
+  margin-bottom: 6px;
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.profile-value {
+  background: var(--profile-value-bg);
+  padding: 12px;
+  border-radius: 8px;
+  min-height: 45px;
+  display: flex;
+  align-items: center;
+  word-break: break-word;
+}
+
+.password-hidden {
+  letter-spacing: 3px;
+  color: #ffcc70;
+}
+
+.profile-saldo {
+  color: #a5b4fc;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.profile-update {
+  margin-top: 40px;
+  display: flex;
+  gap: 20px;
+}
+
+.profile-update input {
+  flex: 1;
+  height: 45px;
+  border-radius: 8px;
+  border: none;
+  padding: 0 15px;
+  background: var(--profile-input-bg);
+  color: var(--profile-text);
+  font-size: 16px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.profile-update button {
+  padding: 0 25px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #6a5acd, #7b68ee);
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+  white-space: nowrap;
+  height: 45px;
+  font-size: 14px;
+}
+
+.profile-update button:hover {
+  opacity: 0.85;
+}
+
+.profile-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70vh;
+}
+
+.spinner {
+  width: 60px;
+  height: 60px;
+  border: 6px solid var(--profile-spinner-bg);
+  border-top: 6px solid #7b68ee;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 1024px) {
+  .profile-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .profile-container {
+    padding: 20px 15px;
+  }
+
+  .profile-card {
+    padding: 24px 20px;
+  }
+
+  .profile-card h2 {
+    font-size: 22px;
+    margin-bottom: 20px;
+  }
+
+  .profile-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .profile-update {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .profile-update input {
+    width: 100%;
+    font-size: 16px;
+  }
+
+  .profile-update button {
+    height: 45px;
+    width: 100%;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-container {
+    padding: 16px 12px;
+  }
+
+  .profile-card {
+    padding: 20px 16px;
+    border-radius: 12px;
+  }
+
+  .profile-card h2 {
+    font-size: 19px;
+    margin-bottom: 16px;
+  }
+
+  .profile-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .profile-field label {
+    font-size: 13px;
+  }
+
+  .profile-value {
+    font-size: 14px;
+    min-height: 42px;
+  }
+
+  .profile-update input {
+    font-size: 16px;
+    height: 44px;
+  }
+
+  .profile-update button {
+    font-size: 14px;
+    height: 44px;
+  }
+}
+
+@media (max-width: 360px) {
+  .profile-card {
+    padding: 16px 12px;
+  }
+
+  .profile-card h2 {
+    font-size: 17px;
+  }
+
+  .profile-value {
+    font-size: 13px;
+  }
+}
