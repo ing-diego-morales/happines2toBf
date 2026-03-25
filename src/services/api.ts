@@ -15,10 +15,20 @@ export const apiFetch = async (
     },
   });
 
+  if (response.status === 401) {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    localStorage.removeItem("recarga_ref");
+    window.location.href = "/login";
+    throw new Error("Sesión expirada");
+  }
+
   if (!response.ok) {
-  const errorData = await response.json().catch(() => ({ error: "Error del servidor" }));
-  throw errorData;
-}
+    const errorData = await response.json().catch(() => ({
+      error: "Error del servidor",
+    }));
+    throw errorData;
+  }
 
   return response.json();
 };
