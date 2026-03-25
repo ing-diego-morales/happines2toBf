@@ -67,7 +67,8 @@ function Layout() {
                   title="Recargar saldo"
                   onClick={() => setRecargaOpen(true)}
                 >
-                  + Recargar
+                  <span className="btn-recargar-icon">+</span>
+                  <span className="btn-recargar-full">+ Recargar</span>
                 </button>
               </div>
             )}
