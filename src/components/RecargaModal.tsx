@@ -16,11 +16,11 @@ const MONTOS_FIJOS = [
 
 export default function RecargaModal({ isOpen, onClose }: Props) {
   const { user } = useContext(AuthContext);
-  const [tab, setTab]                         = useState<"rapido" | "libre">("rapido");
-  const [montoSeleccionado, setMontoSel]      = useState<number | null>(null);
-  const [montoLibreRaw, setMontoLibreRaw]     = useState("");
-  const [cargando, setCargando]               = useState(false);
-  const [error, setError]                     = useState("");
+  const [tab, setTab]                     = useState<"rapido" | "libre">("rapido");
+  const [montoSeleccionado, setMontoSel]  = useState<number | null>(null);
+  const [montoLibreRaw, setMontoLibreRaw] = useState("");
+  const [cargando, setCargando]           = useState(false);
+  const [error, setError]                 = useState("");
 
   if (!isOpen) return null;
 
@@ -29,8 +29,8 @@ export default function RecargaModal({ isOpen, onClose }: Props) {
       ? montoLibreRaw.length > 0 ? parseInt(montoLibreRaw, 10) : null
       : montoSeleccionado;
 
-  const sinComision  = montoEfectivo !== null && montoEfectivo >= 20000;
-  const conComision  = montoEfectivo !== null && montoEfectivo > 0 && montoEfectivo < 20000;
+  const sinComision = montoEfectivo !== null && montoEfectivo >= 20000;
+  const conComision = montoEfectivo !== null && montoEfectivo > 0 && montoEfectivo < 20000;
 
   const handleLibreChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const raw = e.target.value.replace(/[^0-9]/g, "").slice(0, 6);
@@ -50,8 +50,8 @@ export default function RecargaModal({ isOpen, onClose }: Props) {
   };
 
   const handlePagar = async () => {
-    if (!montoEfectivo)       { setError("Selecciona o ingresa un monto"); return; }
-    if (montoEfectivo < 2000) { setError("Monto mínimo: $2.000"); return; }
+    if (!montoEfectivo)         { setError("Selecciona o ingresa un monto"); return; }
+    if (montoEfectivo < 2000)   { setError("Monto mínimo: $2.000"); return; }
     if (montoEfectivo > 500000) { setError("Monto máximo: $500.000"); return; }
 
     setCargando(true);
@@ -66,9 +66,10 @@ export default function RecargaModal({ isOpen, onClose }: Props) {
         },
       );
       const data = await res.json();
-      if (data.error)    { setError(data.error); return; }
-      if (!data.url_pago){ setError("No se pudo iniciar el pago"); return; }
-      sessionStorage.setItem("recarga_ref", data.referencia);
+      if (data.error)     { setError(data.error); return; }
+      if (!data.url_pago) { setError("No se pudo iniciar el pago"); return; }
+
+      localStorage.setItem("recarga_ref", data.referencia);
       window.location.href = data.url_pago;
     } catch {
       setError("Error de conexión. Intenta de nuevo.");
@@ -78,14 +79,17 @@ export default function RecargaModal({ isOpen, onClose }: Props) {
   };
 
   const btnLabel = montoEfectivo && montoEfectivo >= 2000
-    ? `Pagar ${montoEfectivo.toLocaleString("es-CO", { style: "currency", currency: "COP", minimumFractionDigits: 0 })}`
+    ? `Pagar ${montoEfectivo.toLocaleString("es-CO", {
+        style: "currency",
+        currency: "COP",
+        minimumFractionDigits: 0,
+      })}`
     : "Selecciona un monto";
 
   return (
     <div className="rm-overlay" onClick={onClose}>
       <div className="rm-box" onClick={e => e.stopPropagation()}>
 
-        {/* ── Header ── */}
         <div className="rm-header">
           <div className="rm-header-left">
             <div className="rm-header-icon">💳</div>
@@ -97,7 +101,6 @@ export default function RecargaModal({ isOpen, onClose }: Props) {
           <button className="rm-close" onClick={onClose} aria-label="Cerrar">✕</button>
         </div>
 
-        {/* ── Tabs ── */}
         <div className="rm-tabs">
           <button
             className={`rm-tab${tab === "rapido" ? " active" : ""}`}
@@ -113,7 +116,6 @@ export default function RecargaModal({ isOpen, onClose }: Props) {
           </button>
         </div>
 
-        {/* ── Montos fijos ── */}
         {tab === "rapido" && (
           <div className="rm-montos">
             {MONTOS_FIJOS.map(m => (
@@ -132,7 +134,6 @@ export default function RecargaModal({ isOpen, onClose }: Props) {
           </div>
         )}
 
-        {/* ── Monto libre ── */}
         {tab === "libre" && (
           <div className="rm-libre">
             <p className="rm-libre-label">¿Cuánto quieres recargar?</p>
@@ -166,7 +167,6 @@ export default function RecargaModal({ isOpen, onClose }: Props) {
           </div>
         )}
 
-        {/* ── Métodos ── */}
         <div className="rm-metodos">
           <p className="rm-metodos-titulo">Métodos disponibles</p>
           <div className="rm-chips">
@@ -185,10 +185,8 @@ export default function RecargaModal({ isOpen, onClose }: Props) {
           <p className="rm-metodos-nota">Daviplata: usa QR o Breve en el checkout</p>
         </div>
 
-        {/* ── Error ── */}
         {error && <div className="rm-error">⚠ {error}</div>}
 
-        {/* ── Botón ── */}
         <button
           className="rm-btn"
           onClick={handlePagar}
