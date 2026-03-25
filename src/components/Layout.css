@@ -143,6 +143,9 @@
 
 .btn-recargar-icon {
   display: none;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1;
 }
 
 .btn-recargar-full {
@@ -270,26 +273,28 @@
   .nav-saldo i {
     display: none;
   }
+
   .theme-toggle {
     display: none;
   }
+
   .btn-recargar-full {
     display: none;
   }
 
   .btn-recargar-icon {
     display: inline;
-    font-size: 16px;
-    line-height: 1;
   }
 
   .btn-recargar {
-    width: 28px;
-    height: 28px;
+    width: 24px;
+    height: 24px;
     padding: 0;
     border-radius: 50%;
-    font-size: 18px;
-    box-shadow: 0 2px 10px rgba(124, 106, 247, 0.55);
+    font-size: 16px;
+    font-weight: 700;
+    box-shadow: 0 2px 8px rgba(124, 106, 247, 0.45);
+    min-width: unset;
   }
 }
 
