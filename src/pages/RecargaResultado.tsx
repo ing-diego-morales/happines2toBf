@@ -11,14 +11,14 @@ export default function RecargaResultado() {
 
   useEffect(() => {
     const verificar = async () => {
-      const referencia = sessionStorage.getItem("recarga_ref");
+      const referencia = localStorage.getItem("recarga_ref");
       if (!referencia) {
         navigate("/home");
         return;
       }
 
       let intentos = 0;
-      const MAX_INTENTOS = 10; // 10 intentos × 2s = 20 segundos de espera máxima
+      const MAX_INTENTOS = 15;
 
       const intervalo = setInterval(async () => {
         intentos++;
@@ -30,19 +30,16 @@ export default function RecargaResultado() {
 
           if (data.estado === "completada") {
             clearInterval(intervalo);
-            sessionStorage.removeItem("recarga_ref");
+            localStorage.removeItem("recarga_ref");
             setMonto(Number(data.monto));
             await refreshUser();
             setEstado("ok");
             setTimeout(() => navigate("/home"), 3000);
-
           } else if (data.estado === "fallida") {
             clearInterval(intervalo);
-            sessionStorage.removeItem("recarga_ref");
+            localStorage.removeItem("recarga_ref");
             setEstado("error");
-
           } else if (intentos >= MAX_INTENTOS) {
-            // Wompi puede tardar — dejamos pendiente, el webhook llegará después
             clearInterval(intervalo);
             setEstado("pendiente");
           }
@@ -52,7 +49,6 @@ export default function RecargaResultado() {
         }
       }, 2000);
 
-      // Cleanup por si el componente se desmonta
       return () => clearInterval(intervalo);
     };
 
@@ -75,7 +71,8 @@ export default function RecargaResultado() {
           <p className="rr-titulo">¡Pago exitoso!</p>
           {monto && (
             <p className="rr-monto">
-              + {monto.toLocaleString("es-CO", {
+              +{" "}
+              {monto.toLocaleString("es-CO", {
                 style: "currency",
                 currency: "COP",
                 minimumFractionDigits: 0,
