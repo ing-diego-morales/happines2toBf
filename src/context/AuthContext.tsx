@@ -17,7 +17,7 @@ interface AuthContextType {
   user: User | null;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
-  refreshUser: () => Promise<void>; 
+  refreshUser: () => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextType>(
@@ -39,19 +39,32 @@ const socket = io(
 export function AuthProvider({ children }: Props) {
   const [user, setUser] = useState<User | null>(null);
 
+  // Carga el usuario guardado al iniciar
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
-    if (storedUser) setUser(JSON.parse(storedUser));
+    if (storedUser) {
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch {
+        // JSON corrupto — limpiar
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+      }
+    }
   }, []);
 
+  // Escucha actualizaciones de saldo via socket
   useEffect(() => {
     const handleSaldoActualizado = async ({ userId }: { userId: number }) => {
       if (!user || user.id !== userId) return;
 
+      // ✅ No llamar al backend si no hay token — evita 401 innecesarios
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
       try {
         const data = await apiFetch("/api/auth/profile");
         const nuevoSaldo = parseFloat(data.saldo) || 0;
-
         setUser((prev) => {
           if (!prev) return prev;
           const updated = { ...prev, saldo: nuevoSaldo };
@@ -59,7 +72,7 @@ export function AuthProvider({ children }: Props) {
           return updated;
         });
       } catch {
-
+        // Error silencioso — no interrumpir la sesión por esto
       }
     };
 
@@ -71,6 +84,10 @@ export function AuthProvider({ children }: Props) {
   }, [user]);
 
   const login = async (email: string, password: string) => {
+    // ✅ Limpia cualquier sesión anterior antes de hacer login
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+
     const data = await apiFetch("/api/auth/login", {
       method: "POST",
       body: JSON.stringify({ email, password }),
@@ -84,10 +101,15 @@ export function AuthProvider({ children }: Props) {
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    localStorage.removeItem("recarga_ref");
     setUser(null);
   };
 
   const refreshUser = async () => {
+    // ✅ No refrescar si no hay token
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
     try {
       const data = await apiFetch("/api/auth/profile");
       setUser((prev) => {
