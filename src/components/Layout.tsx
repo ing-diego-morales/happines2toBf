@@ -63,13 +63,14 @@ function Layout() {
                 <span>{formatSaldo(user.saldo ?? 0)}</span>
 
                 <button
-                  className="btn-recargar"
-                  title="Recargar saldo"
-                  onClick={() => setRecargaOpen(true)}
-                >
-                  <span className="btn-recargar-icon">+</span>
-                  <span className="btn-recargar-full">+ Recargar</span>
-                </button>
+  className="btn-recargar"
+  title="Próximamente"
+  disabled
+  style={{ opacity: 0.5, cursor: "not-allowed" }}
+>
+  <span className="btn-recargar-icon">+</span>
+  <span className="btn-recargar-full">+ Recargar</span>
+</button>
               </div>
             )}
 
