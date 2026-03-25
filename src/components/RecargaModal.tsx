@@ -16,57 +16,46 @@ const MONTOS_FIJOS = [
 
 export default function RecargaModal({ isOpen, onClose }: Props) {
   const { user } = useContext(AuthContext);
-  const [montoSeleccionado, setMontoSeleccionado] = useState<number | null>(null);
-
-  // montoLibreRaw guarda SOLO dígitos sin formato ("20000", no "20.000")
-  const [montoLibreRaw, setMontoLibreRaw] = useState<string>("");
-  const [usarMontoLibre, setUsarMontoLibre] = useState(false);
-  const [cargando, setCargando]             = useState(false);
-  const [error, setError]                   = useState("");
+  const [tab, setTab]                         = useState<"rapido" | "libre">("rapido");
+  const [montoSeleccionado, setMontoSel]      = useState<number | null>(null);
+  const [montoLibreRaw, setMontoLibreRaw]     = useState("");
+  const [cargando, setCargando]               = useState(false);
+  const [error, setError]                     = useState("");
 
   if (!isOpen) return null;
 
-  // Monto efectivo siempre como número puro
-  const montoEfectivo: number | null = usarMontoLibre
-    ? (montoLibreRaw.length > 0 ? parseInt(montoLibreRaw, 10) : null)
-    : montoSeleccionado;
+  const montoEfectivo: number | null =
+    tab === "libre"
+      ? montoLibreRaw.length > 0 ? parseInt(montoLibreRaw, 10) : null
+      : montoSeleccionado;
 
-  const tieneComision = montoEfectivo !== null && montoEfectivo < 20000;
+  const sinComision  = montoEfectivo !== null && montoEfectivo >= 20000;
+  const conComision  = montoEfectivo !== null && montoEfectivo > 0 && montoEfectivo < 20000;
 
-  const handleMontoLibreChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // Elimina TODO lo que no sea dígito del valor crudo del input
-    const soloDigitos = e.target.value.replace(/[^0-9]/g, "");
-    // Limita a 6 dígitos (máximo $500.000)
-    const limitado = soloDigitos.slice(0, 6);
-    setMontoLibreRaw(limitado);
+  const handleLibreChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const raw = e.target.value.replace(/[^0-9]/g, "").slice(0, 6);
+    setMontoLibreRaw(raw);
     setError("");
   };
 
-  // Lo que se muestra en el input: formateado con separadores de miles
-  const montoLibreDisplay = montoLibreRaw
+  const displayLibre = montoLibreRaw
     ? parseInt(montoLibreRaw, 10).toLocaleString("es-CO")
     : "";
 
-  const handleRecargar = async () => {
-    if (!montoEfectivo) {
-      setError("Selecciona o ingresa un monto");
-      return;
-    }
-    if (montoEfectivo < 2000) {
-      setError("El monto mínimo es $2.000");
-      return;
-    }
-    if (montoEfectivo > 500000) {
-      setError("El monto máximo es $500.000");
-      return;
-    }
+  const switchTab = (t: "rapido" | "libre") => {
+    setTab(t);
+    setMontoSel(null);
+    setMontoLibreRaw("");
+    setError("");
+  };
+
+  const handlePagar = async () => {
+    if (!montoEfectivo)       { setError("Selecciona o ingresa un monto"); return; }
+    if (montoEfectivo < 2000) { setError("Monto mínimo: $2.000"); return; }
+    if (montoEfectivo > 500000) { setError("Monto máximo: $500.000"); return; }
 
     setCargando(true);
     setError("");
-
-    // Enviamos el número puro al backend (nunca string formateado)
-    console.log("Enviando monto al backend:", montoEfectivo, typeof montoEfectivo);
-
     try {
       const res = await fetch(
         `${import.meta.env.VITE_API_URL}/api/pagos/crear-transaccion`,
@@ -77,20 +66,10 @@ export default function RecargaModal({ isOpen, onClose }: Props) {
         },
       );
       const data = await res.json();
-
-      if (data.error) {
-        setError(data.error);
-        return;
-      }
-      if (!data.url_pago) {
-        setError("No se pudo iniciar el pago");
-        return;
-      }
-
-      // Redirige al checkout de Wompi
+      if (data.error)    { setError(data.error); return; }
+      if (!data.url_pago){ setError("No se pudo iniciar el pago"); return; }
       sessionStorage.setItem("recarga_ref", data.referencia);
       window.location.href = data.url_pago;
-
     } catch {
       setError("Error de conexión. Intenta de nuevo.");
     } finally {
@@ -98,144 +77,131 @@ export default function RecargaModal({ isOpen, onClose }: Props) {
     }
   };
 
+  const btnLabel = montoEfectivo && montoEfectivo >= 2000
+    ? `Pagar ${montoEfectivo.toLocaleString("es-CO", { style: "currency", currency: "COP", minimumFractionDigits: 0 })}`
+    : "Selecciona un monto";
+
   return (
     <div className="rm-overlay" onClick={onClose}>
-      <div className="rm-box" onClick={(e) => e.stopPropagation()}>
+      <div className="rm-box" onClick={e => e.stopPropagation()}>
 
-        {/* Header */}
+        {/* ── Header ── */}
         <div className="rm-header">
           <div className="rm-header-left">
-            <span className="rm-icono">💳</span>
+            <div className="rm-header-icon">💳</div>
             <div>
               <h2 className="rm-titulo">Recargar saldo</h2>
-              <p className="rm-sub">Elige el monto a agregar</p>
+              <p className="rm-sub">Selecciona el monto que deseas agregar</p>
             </div>
           </div>
-          <button className="rm-close" onClick={onClose}>✕</button>
+          <button className="rm-close" onClick={onClose} aria-label="Cerrar">✕</button>
         </div>
 
-        {/* Tabs */}
+        {/* ── Tabs ── */}
         <div className="rm-tabs">
           <button
-            className={`rm-tab${!usarMontoLibre ? " rm-tab--activo" : ""}`}
-            onClick={() => { setUsarMontoLibre(false); setError(""); }}
+            className={`rm-tab${tab === "rapido" ? " active" : ""}`}
+            onClick={() => switchTab("rapido")}
           >
-            Montos rápidos
+            ⚡ Montos rápidos
           </button>
           <button
-            className={`rm-tab${usarMontoLibre ? " rm-tab--activo" : ""}`}
-            onClick={() => {
-              setUsarMontoLibre(true);
-              setMontoSeleccionado(null);
-              setMontoLibreRaw("");
-              setError("");
-            }}
+            className={`rm-tab${tab === "libre" ? " active" : ""}`}
+            onClick={() => switchTab("libre")}
           >
-            Monto libre
+            ✏️ Monto personalizado
           </button>
         </div>
 
-        {/* Montos fijos */}
-        {!usarMontoLibre && (
+        {/* ── Montos fijos ── */}
+        {tab === "rapido" && (
           <div className="rm-montos">
-            {MONTOS_FIJOS.map((m) => (
+            {MONTOS_FIJOS.map(m => (
               <button
                 key={m.valor}
-                className={`rm-monto${montoSeleccionado === m.valor ? " rm-monto--activo" : ""}`}
-                onClick={() => { setMontoSeleccionado(m.valor); setError(""); }}
+                className={`rm-monto${montoSeleccionado === m.valor ? " active" : ""}`}
+                onClick={() => { setMontoSel(m.valor); setError(""); }}
               >
                 <span className="rm-monto-valor">{m.etiqueta}</span>
-                <span className={`rm-monto-badge${m.comision ? "" : " rm-monto-badge--gratis"}`}>
-                  {m.comision ? "+ comisión" : "Sin comisión 🎉"}
-                </span>
+                {m.comision
+                  ? <span className="rm-badge rm-badge--warn">+ comisión</span>
+                  : <span className="rm-badge rm-badge--ok">Sin comisión ✓</span>
+                }
               </button>
             ))}
           </div>
         )}
 
-        {/* Monto libre */}
-        {usarMontoLibre && (
+        {/* ── Monto libre ── */}
+        {tab === "libre" && (
           <div className="rm-libre">
-            <label className="rm-libre-label">Ingresa el monto (COP)</label>
-            <div className="rm-libre-input-wrap">
-              <span className="rm-libre-prefix">$</span>
+            <p className="rm-libre-label">¿Cuánto quieres recargar?</p>
+            <div className={`rm-libre-field${montoLibreRaw ? " has-value" : ""}`}>
+              <span className="rm-libre-currency">COP $</span>
               <input
                 className="rm-libre-input"
                 type="text"
                 inputMode="numeric"
-                placeholder="Ej: 35.000"
-                value={montoLibreDisplay}
-                onChange={handleMontoLibreChange}
+                placeholder="0"
+                value={displayLibre}
+                onChange={handleLibreChange}
                 autoFocus
               />
+              {sinComision && <span className="rm-libre-ok">✓</span>}
             </div>
-            <p className="rm-libre-hint">
-              Mínimo $2.000 · Máximo $500.000
-              {montoLibreRaw && parseInt(montoLibreRaw, 10) >= 2000 && parseInt(montoLibreRaw, 10) < 20000 && (
-                <span className="rm-libre-comision"> · Se cobrará comisión Wompi</span>
-              )}
-              {montoLibreRaw && parseInt(montoLibreRaw, 10) >= 20000 && (
-                <span className="rm-libre-gratis"> · Sin comisión 🎉</span>
-              )}
-            </p>
+            <div className="rm-libre-hints">
+              <span>Mín. $2.000</span>
+              <span>Máx. $500.000</span>
+            </div>
+            {conComision && (
+              <p className="rm-libre-warn">
+                ⚠ Montos menores a $20.000 incluyen comisión Wompi
+              </p>
+            )}
+            {sinComision && (
+              <p className="rm-libre-good">
+                ✓ Sin comisión adicional
+              </p>
+            )}
           </div>
         )}
 
-        {/* Métodos de pago */}
+        {/* ── Métodos ── */}
         <div className="rm-metodos">
-          <p className="rm-metodos-titulo">Métodos aceptados</p>
-          <div className="rm-metodos-chips">
-            {["Nequi", "QR", "Breve", "PSE", "Tarjeta"].map((m) => (
-              <span key={m} className="rm-chip">{m}</span>
+          <p className="rm-metodos-titulo">Métodos disponibles</p>
+          <div className="rm-chips">
+            {[
+              { label: "Nequi",   emoji: "📱" },
+              { label: "QR",      emoji: "📷" },
+              { label: "Breve",   emoji: "⚡" },
+              { label: "PSE",     emoji: "🏦" },
+              { label: "Tarjeta", emoji: "💳" },
+            ].map(m => (
+              <span key={m.label} className="rm-chip">
+                {m.emoji} {m.label}
+              </span>
             ))}
           </div>
-          <p className="rm-metodos-nota">
-            Daviplata disponible vía QR o Breve en el checkout
-          </p>
+          <p className="rm-metodos-nota">Daviplata: usa QR o Breve en el checkout</p>
         </div>
 
-        {/* Aviso comisión */}
-        {tieneComision && (
-          <div className="rm-aviso-comision">
-            ⚠️ Montos menores a $20.000 incluyen comisión Wompi (~2.49% + $900)
-          </div>
-        )}
+        {/* ── Error ── */}
+        {error && <div className="rm-error">⚠ {error}</div>}
 
-        {/* Error */}
-        {error && (
-          <div className="rm-error">
-            <span>⚠</span> {error}
-          </div>
-        )}
-
-        {/* Botón pagar */}
+        {/* ── Botón ── */}
         <button
           className="rm-btn"
-          onClick={handleRecargar}
-          disabled={
-            !montoEfectivo ||
-            cargando ||
-            (usarMontoLibre && (!montoLibreRaw || parseInt(montoLibreRaw, 10) < 2000))
-          }
+          onClick={handlePagar}
+          disabled={!montoEfectivo || cargando || montoEfectivo < 2000}
         >
-          {cargando ? (
-            <span className="rm-spinner" />
-          ) : (
-            <>
-              {montoEfectivo && montoEfectivo >= 2000
-                ? `Pagar ${montoEfectivo.toLocaleString("es-CO", {
-                    style: "currency",
-                    currency: "COP",
-                    minimumFractionDigits: 0,
-                  })}`
-                : "Selecciona un monto"}
-              <span className="rm-btn-arrow">→</span>
-            </>
-          )}
+          {cargando
+            ? <><span className="rm-spinner" /> Procesando...</>
+            : <>{btnLabel} <span className="rm-arrow">→</span></>
+          }
         </button>
 
-        <p className="rm-wompi-badge">
-          🔒 Pagos procesados por <strong>Wompi</strong>
+        <p className="rm-footer">
+          <span className="rm-lock">🔒</span> Pagos seguros procesados por <strong>Wompi</strong>
         </p>
       </div>
     </div>
