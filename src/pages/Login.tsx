@@ -7,14 +7,10 @@ import "./Login.css";
 const IconEyeOpen = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="18"
-    height="18"
+    width="18" height="18"
     viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
+    fill="none" stroke="currentColor"
+    strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
   >
     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
     <circle cx="12" cy="12" r="3" />
@@ -24,14 +20,10 @@ const IconEyeOpen = () => (
 const IconEyeOff = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="18"
-    height="18"
+    width="18" height="18"
     viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
+    fill="none" stroke="currentColor"
+    strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
   >
     <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94" />
     <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19" />
@@ -43,10 +35,10 @@ function Login() {
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail]           = useState("");
+  const [password, setPassword]     = useState("");
+  const [loading, setLoading]       = useState(false);
+  const [showPassword, setShowPass] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,17 +52,22 @@ function Login() {
 
     try {
       await login(email, password);
-
       toast.success("Bienvenido 👋");
       navigate("/home");
     } catch (err: any) {
+      // Muestra el mensaje de error del backend si está disponible
       const message =
-        err?.response?.data?.message ||
         err?.data?.message ||
         err?.message ||
         "Credenciales incorrectas";
 
-      toast.error(message);
+      // ✅ Si era un error de sesión anterior, no mostrar "Sesión expirada"
+      //    en la pantalla de login — mostrar mensaje genérico
+      if (message === "Sesión expirada") {
+        toast.error("Credenciales incorrectas");
+      } else {
+        toast.error(message);
+      }
     } finally {
       setLoading(false);
     }
@@ -87,6 +84,7 @@ function Login() {
             placeholder="Correo electrónico"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            autoComplete="email"
           />
 
           <div className="password-wrapper">
@@ -95,15 +93,13 @@ function Login() {
               placeholder="Contraseña"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              autoComplete="current-password"
             />
-
             <button
               type="button"
               className="toggle-password"
-              onClick={() => setShowPassword(!showPassword)}
-              aria-label={
-                showPassword ? "Ocultar contraseña" : "Mostrar contraseña"
-              }
+              onClick={() => setShowPass(!showPassword)}
+              aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
             >
               {showPassword ? <IconEyeOff /> : <IconEyeOpen />}
             </button>
@@ -114,7 +110,7 @@ function Login() {
             className="login-button"
             disabled={loading || !email || !password}
           >
-            {loading ? <span className="spinnerLogin"></span> : "Ingresar"}
+            {loading ? <span className="spinnerLogin" /> : "Ingresar"}
           </button>
         </form>
 
@@ -128,6 +124,7 @@ function Login() {
             contáctame aquí
           </a>
         </div>
+
         <div className="resetLink">
           <a href="/reset-password">¿Olvidaste tu contraseña?</a>
         </div>
