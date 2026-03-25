@@ -173,7 +173,7 @@ export default function RecargaModal({ isOpen, onClose }: Props) {
             {[
               { label: "Nequi",   emoji: "📱" },
               { label: "QR",      emoji: "📷" },
-              { label: "Breve",   emoji: "⚡" },
+              { label: "Bre-B",   emoji: "⚡" },
               { label: "PSE",     emoji: "🏦" },
               { label: "Tarjeta", emoji: "💳" },
             ].map(m => (
