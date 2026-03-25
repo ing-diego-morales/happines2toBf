@@ -64,12 +64,10 @@ function Layout() {
 
                 <button
                   className="btn-recargar"
-                  title="Recarga temporalmente deshabilitada"
-                  disabled
-                  style={{ opacity: 0.5, cursor: "not-allowed" }}
+                  title="Recargar saldo"
+                  onClick={() => setRecargaOpen(true)}
                 >
-                  <span className="btn-recargar-full">Pronto</span>
-                  <span className="btn-recargar-icon">🔒</span>
+                  + Recargar
                 </button>
               </div>
             )}
