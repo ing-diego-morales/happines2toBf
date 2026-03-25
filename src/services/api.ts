@@ -19,7 +19,17 @@ export const apiFetch = async (
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     localStorage.removeItem("recarga_ref");
-    window.location.href = "/login";
+
+    // ✅ Solo redirige si NO estamos ya en /login — evita bucle infinito
+    const enLogin =
+      window.location.pathname === "/login" ||
+      window.location.pathname === "/" ||
+      window.location.pathname.startsWith("/reset");
+
+    if (!enLogin) {
+      window.location.href = "/login";
+    }
+
     throw new Error("Sesión expirada");
   }
 
