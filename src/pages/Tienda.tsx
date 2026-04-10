@@ -49,7 +49,7 @@ export default function Tienda() {
   const { user } = useContext(AuthContext);
   const esAdmin = user?.role === "admin";
   const [moneda, setMoneda] = useState<"COP" | "USD">("COP");
-  const USD_RATE = 3950;
+  const USD_RATE = 3600;
   const [compraTarget, setCompraTarget] = useState<Producto | null>(null);
   const [vista, setVista] = useState<Vista>("verProductos");
   const [categorias, setCategorias] = useState<Categoria[]>([]);
