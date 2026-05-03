@@ -91,8 +91,8 @@ function Users() {
   );
   const [saldoMode, setSaldoMode] = useState<"set" | "add">("set");
   const filteredUsers = users.filter((u) =>
-  u.email.toLowerCase().includes(userSearch.toLowerCase()) ||
-  u.first_name.toLowerCase().includes(userSearch.toLowerCase()),
+  u.email?.toLowerCase().includes(userSearch.toLowerCase()) ||
+  u.first_name?.toLowerCase().includes(userSearch.toLowerCase()),
   );
   const [emailFile, setEmailFile] = useState<File | null>(null);
   const handleResetPassword = async (e: React.FormEvent) => {
