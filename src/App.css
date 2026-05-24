@@ -9,6 +9,3 @@ body {
   color: #f1f5f9;
 }
 
-input, select, textarea {
-  font-size: max(16px, 1rem);
-}
