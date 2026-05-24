@@ -8,3 +8,7 @@ body {
   background: linear-gradient(135deg, #0f172a, #1e293b);
   color: #f1f5f9;
 }
+
+input, select, textarea {
+  font-size: max(16px, 1rem);
+}
