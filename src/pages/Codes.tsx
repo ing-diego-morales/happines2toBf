@@ -196,29 +196,31 @@ function Codes() {
             <p className="date">{selectedEmail.date}</p>
             <iframe
               className="email-iframe"
-              sandbox=""
+              sandbox="allow-popups allow-popups-to-escape-sandbox allow-scripts"
               title="Email preview"
               srcDoc={`
-    <!DOCTYPE html>
-    <html>
-      <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <style>
-          body { margin: 0; padding: 0; }
-          img { max-width: 100%; height: auto; }
-        </style>
-      </head>
-      <body>
-        ${selectedEmail.body}
-        <script>
-          window.onload = function() {
-            const height = document.body.scrollHeight;
-            parent.postMessage({ height }, "*");
-          };
-        </script>
-      </body>
-    </html>
-  `}
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <style>
+        body { margin: 0; padding: 0; }
+        img { max-width: 100%; height: auto; }
+      </style>
+    </head>
+    <body>
+      ${selectedEmail.body
+        .replace(/<a /g, '<a target="_blank" rel="noopener noreferrer" ')
+      }
+      <script>
+        window.onload = function() {
+          const height = document.body.scrollHeight;
+          parent.postMessage({ height }, "*");
+        };
+      </script>
+    </body>
+  </html>
+`}
               ref={(iframe) => {
                 if (!iframe) return;
 
